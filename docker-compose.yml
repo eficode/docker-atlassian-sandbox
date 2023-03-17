@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  jira:
+    image: atlassian/jira-software
+    volumes:
+        - ./jira:/var/atlassian/application-data/jira
+    ports:
+        - 8080:8080
+    environment:
+      - JVM_MAXIMUM_MEMORY=1024m
+      - ATL_DB_TYPE=postgres
+      - ATL_JDBC_URL=jiradb
+      - ATL_JDBC_USER=postgres
+      - ATL_JDBC_PASSWORD=password
+    depends_on:
+      - jiradb
+  
+  confluence:
+      image: atlassian/confluence
+      volumes:
+        - ./confluence:/var/atlassian/application-data/confluence
+      ports:
+        - 8090:8090
+        - 8091:8091
+      environment:
+        - JVM_MAXIMUM_MEMORY=3072m
+        - ATL_DB_TYPE=postgres
+        - ATL_JDBC_URL=confluencedb
+        - ATL_JDBC_USER=postgres
+        - ATL_JDBC_PASSWORD=password
+      depends_on:
+      - confluencedb
+
+  bitbucket:
+    image: atlassian/bitbucket-server
+    volumes:
+        - ./bitbucket:/var/atlassian/application-data/bitbucket
+    ports:
+        - 7990:7990
+    environment:
+        - JVM_MAXIMUM_MEMORY=1024m
+        - ATL_DB_TYPE=postgres
+        - ATL_JDBC_URL=bitbucketdb
+        - ATL_JDBC_USER=postgres
+        - ATL_JDBC_PASSWORD=password
+    depends_on:
+      - bitbucketdb
+
+  jiradb:
+    image: postgres
+    volumes:
+      - ./jirapgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=jiradb
+     
+
+  confluencedb:
+    image: postgres
+    volumes:
+      - ./confpgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=confluencedb
+     
+  bitbucketdb:
+    image: postgres:14
+    volumes:
+        - ./bitbucketpgdata:/var/lib/postgresql/data
+    environment:
+        - POSTGRES_DB=bicbucketdb
+        - POSTGRES_PASSWORD=password
