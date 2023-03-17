@@ -31,6 +31,7 @@ services:
         ATL_JDBC_PASSWORD: password
       depends_on:
       - confluencedb
+      entrypoint: 'bash -c "sleep 15 && /usr/bin/tini -- /entrypoint.py"'
 
   bitbucket:
     image: atlassian/bitbucket-server
