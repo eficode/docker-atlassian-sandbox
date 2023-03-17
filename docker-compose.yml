@@ -8,13 +8,16 @@ services:
     ports:
         - 8080:8080
     environment:
-      - JVM_MAXIMUM_MEMORY=1024m
-      - ATL_DB_TYPE=postgres
-      - ATL_JDBC_URL=jiradb
-      - ATL_JDBC_USER=postgres
-      - ATL_JDBC_PASSWORD=password
+        JVM_MAXIMUM_MEMORY: 3072m
+        ATL_DB_TYPE: postgres72
+        ATL_DB_DRIVER: org.postgresql.Driver
+        ATL_JDBC_URL: jdbc:postgresql://jiradb:5432/jiradb
+        ATL_JDBC_USER: postgres
+        ATL_JDBC_PASSWORD: password
+        CLUSTERED: "false"
     depends_on:
       - jiradb
+    entrypoint: 'bash -c "sleep 5 && /usr/bin/tini -- /entrypoint.py"'
   
   confluence:
       image: atlassian/confluence
@@ -29,9 +32,10 @@ services:
         ATL_JDBC_URL: jdbc:postgresql://confluencedb:5432/confluencedb
         ATL_JDBC_USER: postgres
         ATL_JDBC_PASSWORD: password
+        CLUSTERED: "false"
       depends_on:
       - confluencedb
-      entrypoint: 'bash -c "sleep 15 && /usr/bin/tini -- /entrypoint.py"'
+      entrypoint: 'bash -c "sleep 5 && /usr/bin/tini -- /entrypoint.py"'
 
   bitbucket:
     image: atlassian/bitbucket-server
@@ -39,15 +43,17 @@ services:
         - ./bitbucket:/var/atlassian/application-data/bitbucket
     ports:
         - 7990:7990
-    #environment:
-      #  - JVM_MAXIMUM_MEMORY=1024m
-      # - ATL_DB_TYPE=postgres
-      # - ATL_JDBC_URL=bitbucketdb
-      # - ATL_JDBC_USER=postgres
-      # - ATL_JDBC_PASSWORD=password
+    environment:
+      JVM_MAXIMUM_MEMORY: 1024m
+      JDBC_DRIVER: org.postgresql.Driver
+      JDBC_URL: jdbc:postgresql://bitbucketdb:5432/bitbucketdb
+      JDBC_USER: postgres
+      JDBC_PASSWORD: password
     depends_on:
       - bitbucketdb
+    entrypoint: 'bash -c "sleep 5 && /usr/bin/tini -- /entrypoint.py"'
 
+        
   jiradb:
     image: postgres
     volumes:
@@ -70,5 +76,5 @@ services:
     volumes:
         - ./bitbucketpgdata:/var/lib/postgresql/data
     environment:
-        - POSTGRES_DB=bicbucketdb
+        - POSTGRES_DB=bitbucketdb
         - POSTGRES_PASSWORD=password
