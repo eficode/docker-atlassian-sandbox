@@ -5,7 +5,7 @@ Docker compose script created in order to easily create docker containers with t
 * Confluence
 * Bitbucket
 
-Each container gets its own Postgress Database, that each application is dependent on.
+Each container gets its own Postgress Database, that each application is dependent on. That means that you don't have to start the databases individually.
 
 # Usage
 You can start up all 3 applications by writing:
