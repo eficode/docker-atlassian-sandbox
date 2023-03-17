@@ -1,0 +1,17 @@
+#ARG jiraVersion
+FROM ubuntu:latest
+WORKDIR /home
+RUN apt update
+#use openjdk-8-jdk if you wish to run an older version of jira
+RUN apt --assume-yes install openjdk-11-jdk curl
+RUN mkdir -p downloads
+RUN cd downloads
+RUN mkdir -p jirahome
+#RUN mkdir /var/shared 
+# The version may be overwritten by passing the following variable while building: --build-arg jiraVersion=[version]
+ARG jiraVersion
+RUN curl https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-${jiraVersion}.tar.gz --output atlassian-jira-software-${jiraVersion}.tar.gz
+RUN tar -xvf atlassian-jira-software-${jiraVersion}.tar.gz
+ENV JIRA_HOME=/home/downloads/jirahome
+ENV execPath=atlassian-jira-software-${jiraVersion}-standalone
+CMD ["sh", "-c","$execPath/bin/start-jira.sh -fg"]
