@@ -17,7 +17,7 @@ services:
         CLUSTERED: "false"
     depends_on:
       - jiradb
-    entrypoint: 'bash -c "sleep 5 && /usr/bin/tini -- /entrypoint.py"'
+    entrypoint: 'bash -c "sleep 10 && /usr/bin/tini -- /entrypoint.py"'
   
   confluence:
       image: atlassian/confluence
