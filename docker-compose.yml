@@ -38,7 +38,7 @@ services:
       entrypoint: 'bash -c "sleep 5 && /usr/bin/tini -- /entrypoint.py"'
 
   bitbucket:
-    image: atlassian/bitbucket-server
+    image: atlassian/bitbucket
     volumes:
         - ./bitbucket:/var/atlassian/application-data/bitbucket
     ports:
