@@ -1,8 +1,6 @@
-version: "3"
-
 services:
   jira:
-    image: atlassian/jira-software
+    image: atlassian/jira-software:10.7.4
     volumes:
       - ./jira:/var/atlassian/application-data/jira
     ports:
