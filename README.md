@@ -7,6 +7,8 @@ Docker compose script created in order to easily create docker containers with t
 
 Each container gets its own Postgress Database, that each application is dependent on. That means that you don't have to start the databases individually.
 
+Optionally, there is an openLDAP server and phpLDAPadmin container that can be used to set up an external user directory. If you want to use these, you have to uncomment the "includes" section in the docker-compose file. This can be useful if you want to simulate migrations of users from different user directories.
+
 # Usage
 You can start up all 3 applications by writing:
 ```
@@ -28,6 +30,10 @@ localhost:8080 (Jira)
 localhost:8090 (Confluence)
 localhost:7990 (Bitbucket)
 ```
+Optional LDAP management:
+```
+localhost:8081 (phpLDAPadmin)
+```
 These can be changed in the file if multiple versions are intended to be run at the same time.
 
 # Directory Structure
@@ -40,5 +46,6 @@ These can be changed in the file if multiple versions are intended to be run at 
 ├── docker-compose.yml # docker-compose file
 ├── jira # data directory for jira
 ├── jira_pgdata # data directory for jira postgresql database
-└── README.md # this file
+├── README.md # this file
+└── ldap/bootstrap.ldif # mock LDAP data for openLDAP server
 ```
