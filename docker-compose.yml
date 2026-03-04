@@ -1,6 +1,10 @@
+# Optionally include external LDAP directory for user management
+#include:
+#  - docker-compose-openldap.yml
+
 services:
   jira:
-    image: atlassian/jira-software:10.7.4
+    image: atlassian/jira-software:latest
     volumes:
       - ./jira:/var/atlassian/application-data/jira
     ports:
@@ -13,12 +17,13 @@ services:
       ATL_JDBC_USER: postgres
       ATL_JDBC_PASSWORD: password
       CLUSTERED: "false"
+      JVM_SUPPORT_RECOMMENDED_ARGS: -Datlassian.upm.signature.check.disabled=true
     depends_on:
       - jiradb
     entrypoint: 'bash -c "sleep 10 && /usr/bin/tini -- /entrypoint.py"'
 
   confluence:
-    image: atlassian/confluence
+    image: atlassian/confluence:latest
     volumes:
       - ./confluence:/var/atlassian/application-data/confluence
     ports:
@@ -36,7 +41,7 @@ services:
     entrypoint: 'bash -c "sleep 5 && /usr/bin/tini -- /entrypoint.py"'
 
   bitbucket:
-    image: atlassian/bitbucket
+    image: atlassian/bitbucket:latest
     volumes:
       - ./bitbucket:/var/atlassian/application-data/bitbucket
     ports:
@@ -52,7 +57,7 @@ services:
     entrypoint: 'bash -c "sleep 5 && /usr/bin/tini -- /entrypoint.py"'
 
   jiradb:
-    image: postgres:14
+    image: postgres:17
     volumes:
       - ./jira_pgdata:/var/lib/postgresql/data
     environment:
@@ -60,7 +65,7 @@ services:
       - POSTGRES_DB=jiradb
 
   confluencedb:
-    image: postgres:14
+    image: postgres:17
     volumes:
       - ./confluence_pgdata:/var/lib/postgresql/data
     environment:
@@ -68,7 +73,7 @@ services:
       - POSTGRES_DB=confluencedb
 
   bitbucketdb:
-    image: postgres:14
+    image: postgres:17
     volumes:
       - ./bitbucket_pgdata:/var/lib/postgresql/data
     environment:
